@@ -1,101 +1,99 @@
 .custom-file-upload {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    font-size: .7rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: #3897f0;
-    border: 1px solid #3897f0;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .custom-file-upload:hover {
-    background-color: #2684f0;
-    border-color: #2684f0;
-  }
-  
-  input[type="file"] {
-    display: none;
-  }
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #3897f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  /* drag and drop */
+.custom-file-upload:hover {
+  background-color: #2684f0;
+}
 
+input[type="file"] {
+  display: none;
+}
 
-  .drag-drop {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    
-    font-size: 1.2rem;
-    color: #999;
-    
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .drag-drop p {
-    margin: 0 0 1rem;
-  }
-  
-  .custom-file-upload {
-    padding: 0.5rem 1rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: #3897f0;
-    border: 1px solid #3897f0;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .custom-file-upload:hover {
-    background-color: #2684f0;
-    border-color: #2684f0;
-  }
-  
-  input[type="file"] {
-    display: none;
-  }
-  
-  .hrLine{
-    /* border border-black opacity-50 */
-    border-top: .5px solid rgb(0, 0, 0);
-    opacity: .3;
-  }
-  
-  .captionInput{
-    width: 100%;
-    margin-top: 5px;
-    /* border: none; */
-    outline: none;
-    resize: none;
-    font-size: small;
-    
-  }
+.drag-drop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #999;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  transition: border-color 0.3s ease;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background-color: #fafafa;
+}
 
-  
+.drag-drop:hover {
+  border-color: #3897f0;
+}
+
+.drag-drop p {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.hrLine {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0.5rem 0;
+}
+
+.captionInput {
+  width: 100%;
+  margin-top: 8px;
+  outline: none;
+  resize: none;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  border: none;
+  background-color: transparent;
+}
+
+.captionInput::placeholder {
+  font-size: 0.85rem;
+  color: #bbb;
+}
+
 textarea:focus {
-    /* border: none; Remove the border on focus */
-    outline: none;
-  }
+  outline: none;
+}
 
-  .captionInput::placeholder{
-    font-size: small;
-  }
+.modalBodyBox img,
+.modalBodyBox video {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 6px;
+}
 
-  .modalBodyBox img{
-    max-width: 100%;
-    max-height: 100%;
-  }
+.locationInput {
+  width: 90%;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.5rem;
+  background-color: transparent;
+}
 
-  .locationInput{
-    border: none;
-    outline: none;
-    width: 90%;
-    border:1x solid red
-  }
-  .locationInput:focus{
-    outline: none;
-  }
+.locationInput::placeholder {
+  color: #aaa;
+}
+
+button.w-2.h-2.rounded-full {
+  transition: background-color 0.3s ease;
+}
+
+button.w-2.h-2.rounded-full:hover {
+  background-color: #0073e6;
+}
