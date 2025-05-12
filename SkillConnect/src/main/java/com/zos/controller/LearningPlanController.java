@@ -51,6 +51,8 @@ public class LearningPlanController {
         return new ResponseEntity<>(updatedPlan, HttpStatus.OK);
     }
 
+    //Getmapping
+
     @GetMapping("/{planId}")
     public ResponseEntity<LearningPlan> getLearningPlan(
             @PathVariable Long planId) throws LearningPlanException {
