@@ -50,6 +50,23 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+/* Search button specific styles */
+.search-button {
+  margin-bottom: 12px;
+  padding: 8px;
+  position: relative;
+}
+
+.search-button::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #f0f0f0;
+}
+
 /* Forced visible scrollbar for small screens */
 @media (max-height: 650px) {
   .sidebar-menu {
