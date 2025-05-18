@@ -30,8 +30,7 @@ public class LearningPlanController {
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<LearningPlan> createLearningPlan(@Valid
-            @RequestBody LearningPlan learningPlan,
+    public ResponseEntity<LearningPlan> createLearningPlan(@Valid @RequestBody LearningPlan learningPlan,
             @RequestHeader("Authorization") String token) throws UserException {
 
         User user = userService.findUserProfile(token);
@@ -146,3 +145,4 @@ public class LearningPlanController {
         return new ResponseEntity<>(new MessageResponse("Resource deleted successfully"), HttpStatus.OK);
     }
 }
+// Test
