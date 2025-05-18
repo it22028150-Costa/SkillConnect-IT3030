@@ -1,11 +1,71 @@
+.logo {
+  font-family: 'Billabong', cursive;
+  font-size: 30px;
+  color: #222222;
+  text-shadow: 1px 1px 3px #000000;
+}
 
-  .logo {
-    font-family: 'Billabong', cursive;
-    font-size: 30px;
-    color: #222222;
-    text-shadow: 1px 1px 3px #000000;
-  }
+.hideItemName {
+  display: none;
+}
 
-  .hideItemName{
-    display: none;
+.sidebar-menu {
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+  padding-right: 5px;
+  margin-right: -5px;
+  padding-bottom: 20px; /* Space for bottom items */
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 10px;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-item {
+  transition: all 0.2s ease;
+  padding: 8px 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Forced visible scrollbar for small screens */
+@media (max-height: 650px) {
+  .sidebar-menu {
+    max-height: calc(100vh - 120px);
+    overflow-y: scroll !important;
   }
+  
+  .sidebar-menu::-webkit-scrollbar {
+    display: block !important;
+    width: 5px !important;
+  }
+}
+
+/* Adjustments for very small screens */
+@media (max-height: 500px) {
+  .sidebar-menu {
+    max-height: calc(100vh - 100px);
+  }
+}

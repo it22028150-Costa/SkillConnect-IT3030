@@ -1,7 +1,7 @@
-.sidebarBox{
+.sidebarBox {
     position: sticky;
     top: 0px;
-    height: calc(100vh - 70px);
+    height: 100vh;
     overflow-y: auto;
     padding: 1rem;
     scrollbar-width: thin;
@@ -16,7 +16,34 @@
     border-radius: 10px;
 }
 
-.postsBox{
+.sidebar-wrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid #dbdbdb;
+    background-color: white;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Force scrolling when needed */
+.force-scroll {
+    overflow-y: scroll !important;
+}
+
+.force-scroll::-webkit-scrollbar {
+    width: 5px !important;
+    display: block !important;
+}
+
+.postsBox {
     width: 100%;
     max-width: 650px;
 }
@@ -46,6 +73,7 @@
     transform: translateY(-2px);
 }
 
+/* Responsive adjustments */
 @media (max-width: 1024px) {
     .home-layout {
         flex-direction: column;
@@ -63,5 +91,22 @@
 @media (max-width: 768px) {
     .postsBox {
         padding: 0 10px;
+    }
+}
+
+/* Fix for when zoomed out */
+@media screen and (max-height: 600px) {
+    .sidebar-wrapper {
+        overflow-y: auto;
+    }
+    
+    .sidebar-menu {
+        padding-bottom: 60px; /* Add extra space at bottom for very small screens */
+    }
+}
+
+@media screen and (max-height: 450px) {
+    .sidebar-menu {
+        max-height: 300px !important;
     }
 }

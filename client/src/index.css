@@ -11,6 +11,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f9fafb;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-layout {
+  min-height: 100vh;
+}
+
+.sticky-sidebar-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 code {
@@ -76,5 +99,18 @@ code {
 @supports (-webkit-touch-callout: none) {
   .min-h-screen {
     min-height: -webkit-fill-available;
+  }
+  
+  .h-\[100vh\] {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Zoom-out specific fixes */
+@media screen and (max-height: 500px) {
+  .sidebar-item {
+    margin-bottom: 4px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
   }
 }
