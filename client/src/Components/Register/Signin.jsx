@@ -5,16 +5,23 @@ import {
   FormErrorMessage,
   Input,
   useToast,
+  Text,
+  Heading,
+  Divider,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { signinAction } from "../../Redux/Auth/Action";
 import { getUserProfileAction } from "../../Redux/User/Action";
 import wizDriveImage from '../../assets/IMG_5544.jpg';
-
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -27,21 +34,21 @@ const Signin = () => {
   const initialValues = { email: "", password: "" };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user,signin } = useSelector((store) => store);
+  const { user, signin } = useSelector((store) => store);
   const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
 
   const token = localStorage.getItem("token");
-  console.log("token in signin page ",token)
-  console.log("reqUser -: ", user);
+  
   useEffect(() => {
     if (token) dispatch(getUserProfileAction(token || signin));
-  }, [signin,token]);
+  }, [signin, token]);
 
   useEffect(() => {
     if (user?.reqUser?.username && token) {
       navigate(`/${user.reqUser?.username}`);
       toast({
-        title: "signin successfull",
+        title: "Sign in successful",
         status: "success",
         duration: 8000,
         isClosable: true,
@@ -50,41 +57,60 @@ const Signin = () => {
   }, [user.reqUser]);
 
   const handleSubmit = (values, actions) => {
-    console.log(values);
     dispatch(signinAction(values));
     actions.setSubmitting(false);
   };
 
   return (
-    <div className=" ">
-      <div className="border border-slate-300">
-        <Box p={8} display="flex" flexDirection="column" alignItems="center">
-        <img
-          className="border border-red-800 mb-5"
-          src={wizDriveImage}
-          alt=""
-        />
+    <div>
+      <div className="overflow-hidden">
+        <Box display="flex" flexDirection="column" alignItems="center" className="lg:hidden">
+          <img
+            className="h-12 w-auto mb-4"
+            src={wizDriveImage}
+            alt="SkillConnect Logo"
+          />
+        </Box>
         
+        {/* Only show this heading on large screens */}
+        <Box className="hidden lg:block" textAlign="center" mb={6}>
+          <Heading as="h1" size="lg" color="blue.600">
+            Welcome Back
+          </Heading>
+        </Box>
+          
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
-            <Form className="w-full">
+            <Form className="w-full space-y-4">
               <Field name="email">
                 {({ field, form }) => (
                   <FormControl
                     isInvalid={form.errors.email && form.touched.email}
-                    mb={4}
                   >
-                    <Input
-                      className="w-full"
-                      {...field}
-                      id="email"
-                      placeholder="Please Enter Your Email"
-                    />
-                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                    <InputGroup size={{ base: "md", lg: "md" }}>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<FiMail color="gray" />}
+                      />
+                      <Input
+                        {...field}
+                        id="email"
+                        placeholder="Email address"
+                        bg="gray.50"
+                        borderColor="gray.300"
+                        fontSize={{ base: "sm", lg: "sm" }}
+                        _focus={{
+                          bg: "white",
+                          borderColor: "blue.500",
+                          boxShadow: "0 0 0 1px #3182ce",
+                        }}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage fontSize="xs">{form.errors.email}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
@@ -93,55 +119,106 @@ const Signin = () => {
                 {({ field, form }) => (
                   <FormControl
                     isInvalid={form.errors.password && form.touched.password}
-                    mb={4}
                   >
-                    <Input
-                      {...field}
-                      type="password"
-                      id="password"
-                      placeholder="Please Enter Your Password"
-                    />
-                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                    <InputGroup size={{ base: "md", lg: "md" }}>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<FiLock color="gray" />}
+                      />
+                      <Input
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        placeholder="Password"
+                        bg="gray.50"
+                        borderColor="gray.300"
+                        fontSize={{ base: "sm", lg: "sm" }}
+                        _focus={{
+                          bg: "white",
+                          borderColor: "blue.500",
+                          boxShadow: "0 0 0 1px #3182ce",
+                        }}
+                      />
+                      <InputRightElement width="3rem">
+                        <Button
+                          h="1.5rem"
+                          size="sm"
+                          bg="transparent"
+                          _hover={{ bg: "transparent" }}
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <FiEyeOff /> : <FiEye />}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage fontSize="xs">{form.errors.password}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
-              <p className="text-center">
-                
-              </p>
-              <p className="mt-5 text-center">
-                By signing up, you agree to our Terms , Privacy Policy and
-                Cookies Policy .
-              </p>
+
+              <Text fontSize="xs" sm={{ base: "xs", sm: "sm" }} textAlign="right" color="blue.600" cursor="pointer" fontWeight="medium">
+                Forgot password?
+              </Text>
+
               <Button
-                className="w-full"
                 mt={4}
+                w="full"
                 colorScheme="blue"
                 type="submit"
                 isLoading={formikProps.isSubmitting}
+                size={{ base: "md", lg: "md" }}
+                py={{ base: 5, md: 6 }}
+                borderRadius="md"
+                fontWeight="semibold"
+                className="button-hover-effect"
               >
                 Sign In
               </Button>
 
+              <Box position="relative" my={4}>
+                <Divider />
+                <Text
+                  position="absolute"
+                  top="50%"
+                  left="50%"
+                  transform="translate(-50%, -50%)"
+                  bg="white"
+                  px={3}
+                  color="gray.500"
+                  fontSize={{ base: "xs", sm: "sm" }}
+                >
+                  OR
+                </Text>
+              </Box>
+
               <Button
                 as="a"
                 href="http://localhost:5454/oauth2/authorization/google"
-                colorScheme="red"
-                mt={4}
-                width="100%"
+                w="full"
+                colorScheme="gray"
+                variant="outline"
+                leftIcon={<FcGoogle size={20} />}
+                size={{ base: "md", lg: "md" }}
+                py={{ base: 5, md: 6 }}
+                borderRadius="md"
               >
                 Sign in with Google
               </Button>
-
-
             </Form>
           )}
         </Formik>
-      </Box>
-
       </div>
-      
-      <div className="w-full border border-slate-300 mt-5">
-<p className="text-center py-2">If You Don't Have Already Account <span onClick={()=>navigate("/signup")} className="ml-2 text-blue-700 cursor-pointer">Sign Up</span></p>
+
+      <div className="mt-6 text-center bg-gray-50 py-3 sm:py-4 rounded-lg border border-gray-200">
+        <Text fontSize={{ base: "xs", sm: "sm" }}>
+          Don't have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-blue-600 font-medium cursor-pointer hover:underline"
+          >
+            Sign Up
+          </span>
+        </Text>
       </div>
     </div>
   );
