@@ -1,6 +1,7 @@
 import { useDisclosure } from "@chakra-ui/hooks";
 import React, { useEffect, useRef, useState } from "react";
 import { IoReorderThreeOutline } from "react-icons/io5";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 import { useNavigate } from "react-router";
 import { mainu } from "./SidebarConfig";
@@ -15,6 +16,7 @@ import wizDriveImage from '../../assets/IMG_5544.jpg';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const menuRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState("Home");
   const excludedBoxRef = useRef(null);
@@ -22,7 +24,7 @@ const Sidebar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = useSelector((store) => store);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isCreateReelModalOpen, setIsCreateReelModalOpen] = useState(false)
+  const [isCreateReelModalOpen, setIsCreateReelModalOpen] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -54,7 +56,9 @@ const Sidebar = () => {
     }
     if (tab === "Search") {
       setIsSearchBoxVisible(true);
-    } else setIsSearchBoxVisible(false);
+    } else {
+      setIsSearchBoxVisible(false);
+    }
   };
 
   function handleClick() {
@@ -66,7 +70,6 @@ const Sidebar = () => {
     navigate("/login")
   }
 
-
   const handleCloseCreateReelModal=()=>{
     setIsCreateReelModalOpen(false);
   }
@@ -75,69 +78,127 @@ const Sidebar = () => {
     setIsCreateReelModalOpen(true);
   }
 
+  const toggleSearch = () => {
+    setIsSearchBoxVisible(!isSearchBoxVisible);
+    if (!isSearchBoxVisible) {
+      setActiveTab("Search");
+    } else {
+      setActiveTab("Home");
+    }
+  };
+
+  // Check if the sidebar content is overflowing
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (menuRef.current) {
+        const isOverflowing = menuRef.current.scrollHeight > menuRef.current.clientHeight;
+        if (isOverflowing) {
+          menuRef.current.classList.add('force-scroll');
+        } else {
+          menuRef.current.classList.remove('force-scroll');
+        }
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, []);
+
   return (
-    <div className=" sticky top-0 h-[100vh] pb-10 flex">
-      <div className={`${activeTab === "Search" ? "px-3" : "px-10"} flex flex-col justify-between h-full`}>
-        <div className="pt-10">
-          {!isSearchBoxVisible && (
-            <img
-            className="w-40"
-            src={wizDriveImage}
-            alt=""
-          />
-          )}
-          <div className="mt-10">
-            {mainu.map((item) => (
-              <div
-                onClick={() => handleTabClick(item.title)}
-                className="flex items-center mb-5 cursor-pointer text-lg"
-              >
-                {activeTab === item.title ? item.activeIcon : item.icon}
-                <p
-                  className={` ${
-                    activeTab === item.title ? "font-bold" : "font-semibold"
-                  } ${isSearchBoxVisible ? "hidden" : "block"}`}
-                >
-                  {item.title}
-                </p>
-              </div>
-            ))}
+    <div className="sticky top-0 h-[100vh] flex flex-col overflow-hidden sidebar-container">
+      {isSearchBoxVisible ? (
+        // Search view
+        <div className="flex flex-col h-full bg-white">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <h2 className="text-xl font-bold">Search</h2>
+            <button 
+              onClick={toggleSearch}
+              className="p-2 rounded-full hover:bg-gray-100"
+            >
+              <AiOutlineClose size={20} />
+            </button>
+          </div>
+          <div className="flex-grow overflow-auto">
+            <SearchComponent setIsSearchVisible={setIsSearchBoxVisible} />
           </div>
         </div>
-
-        <div clasName="relative">
-          <div onClick={handleClick} className="flex items-center cursor-pointer ">
-            <IoReorderThreeOutline className="text-2xl" />
-            {!isSearchBoxVisible && <p className="ml-5">More</p>}
-          </div>
-          <div className="absolute bottom-20 left-14  w-[80%]">
-            {showDropdown && (
-              <div className="shadow-md">
-                {/* <p className=" w-full py-2 text-base px-4 border-t border-b  cursor-pointer">
-                  Switch Appearance
-                </p> */}
-             
-                <p onClick={handleLogout} className=" w-full py-2 text-base px-4 border-t border-b cursor-pointer">
-                  Log out
+      ) : (
+        // Normal sidebar view
+        <div className={`px-4 md:px-6 lg:px-10 flex flex-col justify-between h-full`}>
+          {/* Logo section */}
+          <div className="flex flex-col min-h-0">
+            <div className="pt-4 pb-3 flex-shrink-0">
+              <img
+                className="w-28 md:w-32 lg:w-36"
+                src={wizDriveImage}
+                alt="Logo"
+              />
+            </div>
+            
+            {/* Menu items - scrollable section */}
+            <div 
+              ref={menuRef}
+              className="sidebar-menu flex-grow"
+            >
+              {/* Search button at the top */}
+              <div 
+                onClick={toggleSearch} 
+                className="flex items-center mb-6 cursor-pointer text-base lg:text-lg sidebar-item search-button"
+              >
+                <div className="min-w-[2rem] flex justify-center">
+                  <AiOutlineSearch className="text-2xl" />
+                </div>
+                <p className="ml-2 whitespace-nowrap font-semibold">
+                  Search
                 </p>
+              </div>
               
-              
+              {/* Other menu items */}
+              {mainu.filter(item => item.title !== "Search").map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleTabClick(item.title)}
+                  className="flex items-center mb-4 cursor-pointer text-base lg:text-lg sidebar-item"
+                >
+                  <div className="min-w-[2rem] flex justify-center">
+                    {activeTab === item.title ? item.activeIcon : item.icon}
+                  </div>
+                  <p
+                    className={`ml-2 whitespace-nowrap ${
+                      activeTab === item.title ? "font-bold" : "font-semibold"
+                    }`}
+                  >
+                    {item.title}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* More options section - always visible at bottom */}
+          <div className="pt-3 pb-4 border-t border-gray-100 mt-2 flex-shrink-0">
+            <div onClick={handleClick} className="flex items-center cursor-pointer sidebar-item">
+              <div className="min-w-[2rem] flex justify-center">
+                <IoReorderThreeOutline className="text-2xl" />
+              </div>
+              <p className="ml-2 whitespace-nowrap">More</p>
+            </div>
+            {showDropdown && (
+              <div className="absolute bottom-12 left-0 lg:left-14 w-full lg:w-[80%] z-10">
+                <div className="shadow-md bg-white rounded">
+                  <p onClick={handleLogout} className="w-full py-2 text-base px-4 border-t border-b cursor-pointer hover:bg-gray-100">
+                    Log out
+                  </p>
+                </div>
               </div>
             )}
           </div>
         </div>
-      </div>
-
-      {isSearchBoxVisible && (
-        <div >
-          
-          <SearchComponent setIsSearchVisible={setIsSearchBoxVisible} />
-        </div>
       )}
 
       <CreatePostModal onClose={onClose} isOpen={isOpen} onOpen={onOpen} />
-
-      <CreateReelModal onClose={handleCloseCreateReelModal} isOpen={isCreateReelModalOpen} onOpen={handleOpenCreateReelModal}></CreateReelModal>
+      <CreateReelModal onClose={handleCloseCreateReelModal} isOpen={isCreateReelModalOpen} onOpen={handleOpenCreateReelModal} />
     </div>
   );
 };
